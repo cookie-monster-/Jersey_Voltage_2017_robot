@@ -1,39 +1,104 @@
 package org.usfirst.frc.team4587.robot;
 
-import edu.wpi.first.wpilibj.buttons.Button;
+import org.usfirst.frc.team4587.robot.commands.PrintTurretEncoder;
+import org.usfirst.frc.team4587.robot.commands.StartTurretMotors;
+import org.usfirst.frc.team4587.robot.commands.TurnTurretDegrees;
 
-import org.usfirst.frc.team4587.robot.commands.ExampleCommand;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import utility.JoyButton;
+import utility.LogDataSource;
+import utility.ValueLogger;
+
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {
-	//// CREATING BUTTONS
-	// One type of button is a joystick button which is any button on a
-	//// joystick.
-	// You create one by telling it which joystick it's on and which button
-	// number it is.
-	// Joystick stick = new Joystick(port);
-	// Button button = new JoystickButton(stick, buttonNumber);
+public class OI implements LogDataSource {
+	Joystick  stick1;
+	Button	  buttonA1, buttonB1, buttonX1, buttonY1, leftBumper1, rightBumper1;
+	JoyButton leftTrigger1, rightTrigger1;
+	Joystick  stick2;
+	Button	  buttonA2, buttonB2, buttonX2, buttonY2, leftBumper2, rightBumper2;
+	JoyButton leftTrigger2, rightTrigger2;
+	
+    public OI()
+    {
+    	stick1			= new Joystick(1);
+    	buttonA1		= new JoystickButton(stick1, 1);
+    	buttonB1		= new JoystickButton(stick1, 2);
+    	buttonX1		= new JoystickButton(stick1, 3);
+    	buttonY1		= new JoystickButton(stick1, 4);
+    	leftBumper1 	= new JoystickButton(stick1, 5);
+    	leftTrigger1	= new JoyButton(stick1, JoyButton.JoyDir.DOWN, 2);
+    	rightBumper1	= new JoystickButton(stick1, 6);
+    	rightTrigger1	= new JoyButton(stick1, JoyButton.JoyDir.DOWN, 3);
+    	
+    	stick2			= new Joystick(2);
+    	buttonA2		= new JoystickButton(stick2, 1);
+    	buttonB2		= new JoystickButton(stick2, 2);
+    	buttonX2		= new JoystickButton(stick2, 3);
+    	buttonY2		= new JoystickButton(stick2, 4);
+    	leftBumper2 	= new JoystickButton(stick2, 5);
+    	leftTrigger2	= new JoyButton(stick2, JoyButton.JoyDir.DOWN, 2);
+    	rightBumper2	= new JoystickButton(stick2, 6);
+    	rightTrigger2	= new JoyButton(stick2, JoyButton.JoyDir.DOWN, 3);
 
-	// There are a few additional built in buttons you can use. Additionally,
-	// by subclassing Button you can create custom triggers and bind those to
-	// commands the same as any other Button.
+    	buttonA1.whenPressed(new TurnTurretDegrees(0.3, 45));
+    	buttonB1.whenPressed(new StartTurretMotors(0.0));
+    	buttonY1.whenPressed(new StartTurretMotors(-0.3));
+    	buttonX1.whenPressed(new PrintTurretEncoder());
+    	
+    	//  D R I V E R   C O N T R O L L E R
 
-	//// TRIGGERING COMMANDS WITH BUTTONS
-	// Once you have a button, it's trivial to bind it to a button in one of
-	// three ways:
+    	/*if ( Robot.iAmARealRobot()) {
+    		buttonB1.whenPressed(new DriveWithJoysticks());
+    		buttonA1.whenPressed(new RunCameraThread());
+    		buttonX1.whenPressed(new AutomaticAim(0, 0.6));
+	    	buttonY1.whenPressed(new ToggleFlashlight());
+	    	leftBumper1.whenPressed(new ToggleArmPiston());
+	    	leftTrigger1.whileHeld(new LowerAndHoldArm());
+	    	rightBumper1.whenPressed(new LowShot());
+    		rightTrigger1.whenPressed(new HighShot());
+    	}
+    	else 
+    	{
+    		buttonA1.whenPressed(new RunCameraThread());
+    	}*/
 
-	// Start the command when the button is pressed and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenPressed(new ExampleCommand());
+    	//  I N T A K E   C O N T R O L L E R
 
-	// Run the command while the button is being held down and interrupt it once
-	// the button is released.
-	// button.whileHeld(new ExampleCommand());
-
-	// Start the command when the button is released and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenReleased(new ExampleCommand());
+    	/*if ( Robot.iAmARealRobot()) {
+	    	//buttonA2.whenPressed(new AutoIntakeBall());
+	    	buttonA2.whenPressed(new ToggleFlashlight());
+	    	buttonB2.whenPressed(new StopIntakeMotors());
+	    	buttonX2.whenPressed(new StartIntakeMotors(Parameters.getDouble("Intake Motor Eject Speed", -1.0)));
+	    	buttonY2.whenPressed(new StartIntakeMotors(Parameters.getDouble("Intake Motor Input Speed", 1.0)));
+	    	rightBumper2.whenPressed(new ToggleIntakePiston());
+	    	leftBumper2.whenPressed(new PulseLowGoalSolenoid(1000));
+    	}*/
+    }
+    
+    public double getTurn()
+    {
+    	return stick1.getRawAxis(4);
+    }
+    
+    public double getDrive()
+    {
+    	return stick1.getRawAxis(1) * -1;
+    }
+    
+    public void rumble( float value )
+    {
+    	stick1.setRumble(Joystick.RumbleType.kRightRumble, value);
+    }
+    
+    public void gatherValues ( ValueLogger logger )
+    {
+    	logger.logDoubleValue("Driving Joystick Value", getDrive());
+    	logger.logDoubleValue("Turning Joystick Value", getTurn());
+    }
 }
