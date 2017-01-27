@@ -13,6 +13,8 @@ public class TurnTurretDegrees extends Command {
 	public double motorLevel;
 	private double m_degreesToTurn;
 	private double m_startDegrees;
+	private double m_degreesLeftToTurn;
+	private int m_count;
 
     public TurnTurretDegrees(double motorLevel, int degrees) {
     	this.motorLevel = motorLevel;
@@ -23,15 +25,45 @@ public class TurnTurretDegrees extends Command {
     // Called just before this Command runs the first time
     protected void initialize() 
     {
+    	m_degreesLeftToTurn = m_degreesToTurn;
     	m_startDegrees = Robot.getTurret().getDegrees();
-    	Robot.getTurret().setTurretMotorTarget(motorLevel);
+    	//Robot.getTurret().setTurretMotorTarget(motorLevel);
+    	SmartDashboard.putNumber("turret motor inside command", Robot.getTurret().getTurretMotorActual());
     	//m_startEncoders = 10;
+    	m_count = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
+    	double newDegreesLeftToTurn = 0;
+    	if (m_degreesToTurn < 0)
+        {
+        	newDegreesLeftToTurn = m_degreesToTurn + (m_startDegrees - Robot.getTurret().getDegrees());
+        }
+    	else
+    	{
+    		newDegreesLeftToTurn = m_degreesToTurn - (Robot.getTurret().getDegrees() - m_startDegrees);
+    	}
+    	Robot.getTurret().setTurretMotorTarget(Robot.getTurret().whatMotorLevel(newDegreesLeftToTurn, m_degreesLeftToTurn));
+    	if (Math.abs(newDegreesLeftToTurn - m_degreesLeftToTurn) <= 0.01)
+    	{
+    		if (m_degreesToTurn < 0)
+    		{
+            	Robot.getTurret().setTurretMotorTarget(Robot.getTurret().whatMotorLevel(newDegreesLeftToTurn, m_degreesLeftToTurn) - 0.05);
+    		}
+    		else
+    		{
+            	Robot.getTurret().setTurretMotorTarget(Robot.getTurret().whatMotorLevel(newDegreesLeftToTurn, m_degreesLeftToTurn) + 0.05);
+    		}
+    	}
     	Robot.getTurret().updateTurretMotor();
+    	m_count += 1;
+    	m_degreesLeftToTurn = newDegreesLeftToTurn;
+    	SmartDashboard.putNumber("turret count", m_count);
+    	SmartDashboard.putNumber("What motor level", Robot.getTurret().getTurretMotorActual());
+    	
+    	SmartDashboard.putNumber("degrees left to turn", m_degreesLeftToTurn);
     }
 
     // Make this return true when this Command no longer needs to run execute()

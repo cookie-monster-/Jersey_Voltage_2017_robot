@@ -46,10 +46,12 @@ public class OI implements LogDataSource {
     	rightBumper2	= new JoystickButton(stick2, 6);
     	rightTrigger2	= new JoyButton(stick2, JoyButton.JoyDir.DOWN, 3);
 
-    	buttonA1.whenPressed(new TurnTurretDegrees(0.3, 45));
+    	buttonA1.whenPressed(new TurnTurretDegrees(0.25, 15));
     	buttonB1.whenPressed(new StartTurretMotors(0.0));
-    	buttonY1.whenPressed(new StartTurretMotors(-0.3));
-    	buttonX1.whenPressed(new PrintTurretEncoder());
+    	buttonY1.whenPressed(new StartTurretMotors(-1.0));
+    	buttonX1.whenPressed(new StartTurretMotors(1.0));
+    	//buttonY1.whenPressed(new TurnTurretDegrees(0.25, 20));
+    	//buttonX1.whenPressed(new TurnTurretDegrees(0.25, 60));
     	
     	//  D R I V E R   C O N T R O L L E R
 

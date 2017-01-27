@@ -137,6 +137,7 @@ public class Robot extends IterativeRobot implements LogDataSource {
 		if ( logger != null ) logger.logValues(start);
 		SmartDashboard.putNumber("Turret Encoder", m_turret.getEncoder());
 		SmartDashboard.putNumber("Turret Degrees", m_turret.getDegrees());
+		SmartDashboard.putNumber("Turret Motor", m_turret.getTurretMotorActual());
 	}
 
 	/**

@@ -3,6 +3,7 @@ package org.usfirst.frc.team4587.robot.subsystems;
 import utility.LogDataSource;
 import org.usfirst.frc.team4587.robot.Robot;
 import org.usfirst.frc.team4587.robot.RobotMap;
+import org.usfirst.frc.team4587.robot.commands.StartTurretMotors;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -44,7 +45,7 @@ public class Turret extends Subsystem implements LogDataSource {
 */
     public Turret()
     {    	
-        m_turretMotor = new RampedSpeedController(ControllerType.Talon,RobotMap.MOTOR_TURRET);
+        m_turretMotor = new RampedSpeedController(ControllerType.VictorSP,RobotMap.MOTOR_TURRET);
         m_encoder = new Encoder(RobotMap.TURRET_ENCODER_A, RobotMap.TURRET_ENCODER_B);
         m_encodersInTurn = 256;
         m_startEncoders = getEncoder();
@@ -70,6 +71,7 @@ public class Turret extends Subsystem implements LogDataSource {
 	public void setTurretMotorTarget(double x)
     {
     	m_turretMotor.set(-1 * x);
+    	System.out.println(x);
     }
     public double getTurretMotorActual()
     {
@@ -83,7 +85,7 @@ public class Turret extends Subsystem implements LogDataSource {
     {
     	return m_encoder.get();
     }
-    public double getDegrees()
+    public double getHeading()
     {
     	m_nowEncoders = Robot.getTurret().getEncoder();
 	    m_nowDegrees = ((m_nowEncoders - m_startEncoders) / m_encodersInTurn) * 360;
@@ -97,14 +99,45 @@ public class Turret extends Subsystem implements LogDataSource {
 	    }
 	    return m_nowDegrees;
     }
+    public double getDegrees()
+    {
+    	m_nowEncoders = Robot.getTurret().getEncoder();
+	    m_nowDegrees = ((m_nowEncoders - m_startEncoders) / m_encodersInTurn) * 360;
+	    return m_nowDegrees;
+    }
+    public double whatMotorLevel(double degreesToTurn, double lastDegreesToTurn)
+    {
+    	if (degreesToTurn >= 90)
+    	{
+    		return 1.0;
+    	}
+    	else if (degreesToTurn < 90 && degreesToTurn >= 45)
+    	{
+    		return 0.7;
+    	}
+    	else if (degreesToTurn < 45 && degreesToTurn >= 20)
+    	{
+    		return 0.3;
+    	}
+    	else if (degreesToTurn < 20 && degreesToTurn >= 10)
+    	{
+    		return 0.05;
+    	}
+    	else 
+    	{
+    		return 0.0;
+    	}
+    }
     public void initDefaultCommand() {
-        //setDefaultCommand(new IntakeIdle());
+        setDefaultCommand(new StartTurretMotors(0.0));
+    	
     }
     
     public void gatherValues( ValueLogger logger)
     {
     	//m_turretMotor.gatherValues(logger);
-    	logger.logDoubleValue("Turret Motor Value", m_turretMotor.get());
+    	logger.logDoubleValue("Turret Motor Value", getTurretMotorActual());
+    	logger.logDoubleValue("Turret Encoder Value", m_encoder.get());
     }
 
 }
