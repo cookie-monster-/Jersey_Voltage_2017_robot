@@ -14,6 +14,7 @@ import org.usfirst.frc.team4587.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4587.robot.commands.TurnTurretDegrees;
 import org.usfirst.frc.team4587.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team4587.robot.subsystems.Turret;
+import org.usfirst.frc.team4587.robot.subsystems.TurretPID;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,8 +33,8 @@ public class Robot extends IterativeRobot implements LogDataSource {
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 
-	private static Turret m_turret;
-	public static Turret getTurret()
+	private static TurretPID m_turret;
+	public static TurretPID getTurret()
 	{
 		return m_turret;
 	}
@@ -48,15 +49,14 @@ public class Robot extends IterativeRobot implements LogDataSource {
 	@Override
 	public void robotInit() {
 		m_robot = this;
-		m_turret = new Turret();
-		
+		m_turret = new TurretPID();
 		
 		
 		oi = new OI();
 		
         logger = new ValueLogger("/home/lvuser/dump",10);
         logger.registerDataSource(this);
-        logger.registerDataSource(m_turret);
+        //logger.registerDataSource(m_turret);
 		/*chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);*/
@@ -70,6 +70,7 @@ public class Robot extends IterativeRobot implements LogDataSource {
 	@Override
 	public void disabledInit() {
 		initializeNewPhase(ValueLogger.DISABLED_PHASE);
+		m_turret.disable();
 	}
 
 	@Override
@@ -121,6 +122,8 @@ public class Robot extends IterativeRobot implements LogDataSource {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+
+		m_turret.enable();
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
@@ -137,7 +140,7 @@ public class Robot extends IterativeRobot implements LogDataSource {
 		if ( logger != null ) logger.logValues(start);
 		SmartDashboard.putNumber("Turret Encoder", m_turret.getEncoder());
 		SmartDashboard.putNumber("Turret Degrees", m_turret.getDegrees());
-		SmartDashboard.putNumber("Turret Motor", m_turret.getTurretMotorActual());
+		//SmartDashboard.putNumber("Turret Motor", m_turret.getTurretMotorActual());
 	}
 
 	/**

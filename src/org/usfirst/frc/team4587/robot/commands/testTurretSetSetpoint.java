@@ -7,25 +7,31 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class StartTurretMotors extends Command {
-	
-	public double motorLevel;
+public class testTurretSetSetpoint extends Command {
 
-    public StartTurretMotors(double motorLevel) {
-    	this.motorLevel = motorLevel;
+    public testTurretSetSetpoint() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     	requires(Robot.getTurret());
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() 
-    {
-    	Robot.getTurret().setTurretMotorTarget(motorLevel);
+    protected void initialize() {
+    	double testSetpoint = Robot.getTurret().m_testSetPoint;
+    	while (testSetpoint >= 360)
+    	{
+    		testSetpoint -= 360;
+    	}
+    	while (testSetpoint < 0)
+    	{
+    		testSetpoint += 360;
+    	}
+    	
+    	Robot.getTurret().setSetpoint(testSetpoint);
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() 
-    {
-    	//Robot.getTurret().updateTurretMotor();
+    protected void execute() {
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -35,12 +41,10 @@ public class StartTurretMotors extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.getTurret().setTurretMotorTarget(0.0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	end();
     }
 }

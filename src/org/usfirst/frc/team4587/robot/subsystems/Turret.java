@@ -107,26 +107,67 @@ public class Turret extends Subsystem implements LogDataSource {
     }
     public double whatMotorLevel(double degreesToTurn, double lastDegreesToTurn)
     {
-    	if (degreesToTurn >= 90)
+    	double deltaDegreesToTurn = degreesToTurn - lastDegreesToTurn;
+    	double motorSpeed = 0.0;
+    	
+    	
+    	
+    	if (degreesToTurn <= 20 && deltaDegreesToTurn <= 3)
     	{
-    		return 1.0;
+    		if (degreesToTurn >= 15)
+    		{
+    			motorSpeed = 0.1;
+    		}
+    		else if (degreesToTurn >= 5)
+    		{
+    			motorSpeed = 0.05;
+    		}
+    		else
+    		{
+    			motorSpeed = 0.0;
+    		}
     	}
-    	else if (degreesToTurn < 90 && degreesToTurn >= 45)
+    	else
     	{
-    		return 0.7;
+		    if (degreesToTurn >= 90)
+		   	{
+		   		motorSpeed = 1.0;
+		   	}
+		   	else if (degreesToTurn < 90 && degreesToTurn >= 60)
+	    	{
+		   		motorSpeed = 0.5;
+		    }
+		   	else if (degreesToTurn < 60 && degreesToTurn >= 40)
+		   	{
+		   		motorSpeed = 0.4;
+		   	}
+		   	else if (degreesToTurn < 40 && degreesToTurn >= 20)
+		   	{
+		   		motorSpeed = 0.3;
+		   	}
+	    	else if (degreesToTurn < 20 && degreesToTurn >= 10)
+		    {
+		   		motorSpeed = 0.05;
+		   	}
+		   	else 
+		   	{
+	    		motorSpeed = 0.0;
+	    	}
     	}
-    	else if (degreesToTurn < 45 && degreesToTurn >= 20)
+    	
+    	if (Math.abs(deltaDegreesToTurn) >= Math.abs(degreesToTurn) - 3)
     	{
-    		return 0.3;
+    		motorSpeed = 0.0;
     	}
-    	else if (degreesToTurn < 20 && degreesToTurn >= 10)
+	    
+	    if (Math.abs(deltaDegreesToTurn) <= 0.01)
     	{
-    		return 0.05;
+    		motorSpeed += 0.1;
     	}
-    	else 
-    	{
-    		return 0.0;
-    	}
+	    
+	    
+	    
+	    return motorSpeed;
     }
     public void initDefaultCommand() {
         setDefaultCommand(new StartTurretMotors(0.0));

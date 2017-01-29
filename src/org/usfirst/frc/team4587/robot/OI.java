@@ -3,6 +3,9 @@ package org.usfirst.frc.team4587.robot;
 import org.usfirst.frc.team4587.robot.commands.PrintTurretEncoder;
 import org.usfirst.frc.team4587.robot.commands.StartTurretMotors;
 import org.usfirst.frc.team4587.robot.commands.TurnTurretDegrees;
+import org.usfirst.frc.team4587.robot.commands.testTurretDecrease;
+import org.usfirst.frc.team4587.robot.commands.testTurretIncrease;
+import org.usfirst.frc.team4587.robot.commands.testTurretSetSetpoint;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -46,10 +49,12 @@ public class OI implements LogDataSource {
     	rightBumper2	= new JoystickButton(stick2, 6);
     	rightTrigger2	= new JoyButton(stick2, JoyButton.JoyDir.DOWN, 3);
 
-    	buttonA1.whenPressed(new TurnTurretDegrees(0.25, 15));
-    	buttonB1.whenPressed(new StartTurretMotors(0.0));
-    	buttonY1.whenPressed(new StartTurretMotors(-1.0));
-    	buttonX1.whenPressed(new StartTurretMotors(1.0));
+    	//buttonA1.whenPressed(new TurnTurretDegrees(180));
+    	//buttonB1.whenPressed(new StartTurretMotors(0.0));
+    	buttonA1.whenPressed(new testTurretIncrease());
+    	buttonB1.whenPressed(new testTurretDecrease());
+    	buttonY1.whenPressed(new testTurretSetSetpoint());
+    	//buttonX1.whenPressed(new StartTurretMotors(1.0));
     	//buttonY1.whenPressed(new TurnTurretDegrees(0.25, 20));
     	//buttonX1.whenPressed(new TurnTurretDegrees(0.25, 60));
     	
