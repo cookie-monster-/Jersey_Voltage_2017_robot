@@ -46,7 +46,7 @@ public class Turret extends Subsystem implements LogDataSource {
     public Turret()
     {    	
         m_turretMotor = new RampedSpeedController(ControllerType.VictorSP,RobotMap.MOTOR_TURRET);
-        m_encoder = new Encoder(RobotMap.TURRET_ENCODER_A, RobotMap.TURRET_ENCODER_B);
+        m_encoder = new Encoder(RobotMap.ENCODER_TURRET_A, RobotMap.ENCODER_TURRET_B);
         m_encodersInTurn = 256;
         m_startEncoders = getEncoder();
         m_nowDegrees = 0;

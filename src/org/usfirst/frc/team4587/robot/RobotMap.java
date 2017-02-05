@@ -12,9 +12,16 @@ public class RobotMap {
 	// public static int leftMotor = 1;
 	// public static int rightMotor = 2;
 
-	public static final int MOTOR_TURRET = 0;
-	public static final int TURRET_ENCODER_A = 0;
-	public static final int TURRET_ENCODER_B = 1;
+	public static final int MOTOR_RIGHT_DRIVETRAIN = 0;
+	public static final int	MOTOR_LEFT_DRIVETRAIN = 1;
+	public static final int MOTOR_TURRET = 8;
+	
+	public static final int ENCODER_TURRET_A = 0;
+	public static final int ENCODER_TURRET_B = 1;
+	public static final int ENCODER_RIGHT_DRIVE_A = 6;
+    public static final int ENCODER_RIGHT_DRIVE_B = 7;
+    public static final int ENCODER_LEFT_DRIVE_A = 8;
+    public static final int ENCODER_LEFT_DRIVE_B = 9;
 	
 	// If are using multiple modules, make sure to define both the port
 	// number and the module. For example you with a rangefinder:

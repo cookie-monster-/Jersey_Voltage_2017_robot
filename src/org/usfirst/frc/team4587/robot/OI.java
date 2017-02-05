@@ -2,6 +2,7 @@ package org.usfirst.frc.team4587.robot;
 
 import org.usfirst.frc.team4587.robot.commands.PrintTurretEncoder;
 import org.usfirst.frc.team4587.robot.commands.StartTurretMotors;
+import org.usfirst.frc.team4587.robot.commands.ToggleAimMode;
 import org.usfirst.frc.team4587.robot.commands.TurnTurretDegrees;
 import org.usfirst.frc.team4587.robot.commands.testTurretDecrease;
 import org.usfirst.frc.team4587.robot.commands.testTurretIncrease;
@@ -49,14 +50,10 @@ public class OI implements LogDataSource {
     	rightBumper2	= new JoystickButton(stick2, 6);
     	rightTrigger2	= new JoyButton(stick2, JoyButton.JoyDir.DOWN, 3);
 
-    	//buttonA1.whenPressed(new TurnTurretDegrees(180));
-    	//buttonB1.whenPressed(new StartTurretMotors(0.0));
     	buttonA1.whenPressed(new testTurretIncrease());
+    	buttonX1.whenPressed(new ToggleAimMode());
     	buttonB1.whenPressed(new testTurretDecrease());
     	buttonY1.whenPressed(new testTurretSetSetpoint());
-    	//buttonX1.whenPressed(new StartTurretMotors(1.0));
-    	//buttonY1.whenPressed(new TurnTurretDegrees(0.25, 20));
-    	//buttonX1.whenPressed(new TurnTurretDegrees(0.25, 60));
     	
     	//  D R I V E R   C O N T R O L L E R
 

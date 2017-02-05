@@ -12,6 +12,8 @@ import utility.ValueLogger;
 
 import org.usfirst.frc.team4587.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4587.robot.commands.TurnTurretDegrees;
+import org.usfirst.frc.team4587.robot.subsystems.DriveBase;
+import org.usfirst.frc.team4587.robot.subsystems.DriveBaseSimple;
 import org.usfirst.frc.team4587.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team4587.robot.subsystems.Turret;
 import org.usfirst.frc.team4587.robot.subsystems.TurretPID;
@@ -31,13 +33,29 @@ public class Robot extends IterativeRobot implements LogDataSource {
 		return m_robot;
 	}
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static OI oi;
+	private static OI m_oi;
+	public static OI getOI()
+	{
+		return m_oi;
+	}
 
 	private static TurretPID m_turret;
 	public static TurretPID getTurret()
 	{
 		return m_turret;
 	}
+	
+	private static DriveBase m_driveBase;
+	public static DriveBase getDriveBase()
+	{
+		return m_driveBase;
+	}
+	private static DriveBaseSimple m_driveBaseSimple;
+	public static DriveBaseSimple getDriveBaseSimple()
+	{
+		return m_driveBaseSimple;
+	}
+	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -50,12 +68,14 @@ public class Robot extends IterativeRobot implements LogDataSource {
 	public void robotInit() {
 		m_robot = this;
 		m_turret = new TurretPID();
+		//m_driveBase = new DriveBase();
+		m_driveBaseSimple = new DriveBaseSimple();
 		
-		
-		oi = new OI();
+		m_oi = new OI();
 		
         logger = new ValueLogger("/home/lvuser/dump",10);
         logger.registerDataSource(this);
+        logger.registerDataSource ( m_driveBase );
         //logger.registerDataSource(m_turret);
 		/*chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
@@ -112,7 +132,7 @@ public class Robot extends IterativeRobot implements LogDataSource {
 	public void autonomousPeriodic() {
 		long start = System.nanoTime();
         Scheduler.getInstance().run();
-        if ( logger != null ) logger.logValues(start);
+       // if ( logger != null ) logger.logValues(start);
 	}
 
 	@Override
@@ -137,9 +157,12 @@ public class Robot extends IterativeRobot implements LogDataSource {
 		boolean on = true;
     
 		Scheduler.getInstance().run();
-		if ( logger != null ) logger.logValues(start);
+		//if ( logger != null ) logger.logValues(start);
 		SmartDashboard.putNumber("Turret Encoder", m_turret.getEncoder());
 		SmartDashboard.putNumber("Turret Degrees", m_turret.getDegrees());
+		SmartDashboard.putNumber("Turret Heading", m_turret.getHeading());
+		SmartDashboard.putNumber("Turret Setpoint", m_turret.getSetpoint());
+		
 		//SmartDashboard.putNumber("Turret Motor", m_turret.getTurretMotorActual());
 	}
 
@@ -157,16 +180,16 @@ public class Robot extends IterativeRobot implements LogDataSource {
             autonomousCommand.cancel();
             autonomousCommand = null;
         }
-    	/*Parameters.readValues();
-    	if ( m_iAmARealRobot ) {
-            Robot.getDriveBase().initialize();
-            Robot.getIntake().initialize();
-    	}
-        if ( m_iHaveACamera ) {
+    	//Parameters.readValues();
+    	//if ( m_iAmARealRobot ) {
+            //Robot.getDriveBase().initialize(); add back
+            //Robot.getIntake().initialize();
+    	//}
+        /*if ( m_iHaveACamera ) {
             CameraThread.initializeForPhase();
-        }
-        Gyro.reset();*/
-        if ( logger != null ) logger.initializePhase(whichPhase);
+        }*/
+        //Gyro.reset();
+        //if ( logger != null ) logger.initializePhase(whichPhase); add back
     }
 	
 	public void gatherValues ( ValueLogger logger )
