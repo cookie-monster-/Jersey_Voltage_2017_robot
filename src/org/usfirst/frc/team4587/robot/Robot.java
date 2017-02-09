@@ -15,6 +15,7 @@ import org.usfirst.frc.team4587.robot.commands.TurnTurretDegrees;
 import org.usfirst.frc.team4587.robot.subsystems.DriveBase;
 import org.usfirst.frc.team4587.robot.subsystems.DriveBaseSimple;
 import org.usfirst.frc.team4587.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team4587.robot.subsystems.GearIntake;
 import org.usfirst.frc.team4587.robot.subsystems.Turret;
 import org.usfirst.frc.team4587.robot.subsystems.TurretPID;
 
@@ -45,6 +46,12 @@ public class Robot extends IterativeRobot implements LogDataSource {
 		return m_turret;
 	}
 	
+	private static GearIntake m_gearIntake;
+	public static GearIntake getGearIntake()
+	{
+		return m_gearIntake;
+	}
+	
 	private static DriveBase m_driveBase;
 	public static DriveBase getDriveBase()
 	{
@@ -68,6 +75,7 @@ public class Robot extends IterativeRobot implements LogDataSource {
 	public void robotInit() {
 		m_robot = this;
 		m_turret = new TurretPID();
+    	m_gearIntake = new GearIntake();
 		//m_driveBase = new DriveBase();
 		m_driveBaseSimple = new DriveBaseSimple();
 		
@@ -76,6 +84,7 @@ public class Robot extends IterativeRobot implements LogDataSource {
         logger = new ValueLogger("/home/lvuser/dump",10);
         logger.registerDataSource(this);
         logger.registerDataSource ( m_driveBase );
+        logger.registerDataSource ( m_gearIntake );
         //logger.registerDataSource(m_turret);
 		/*chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
@@ -164,6 +173,10 @@ public class Robot extends IterativeRobot implements LogDataSource {
 		SmartDashboard.putNumber("Turret Setpoint", m_turret.getSetpoint());
 		
 		//SmartDashboard.putNumber("Turret Motor", m_turret.getTurretMotorActual());
+		if (m_gearIntake.getGearIntakeSwitch() == false)
+    	{
+    		m_gearIntake.setGearIsLoaded(true);
+    	}
 	}
 
 	/**
