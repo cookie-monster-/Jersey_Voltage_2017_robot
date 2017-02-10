@@ -3,6 +3,8 @@ package org.usfirst.frc.team4587.robot.subsystems;
 import org.usfirst.frc.team4587.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import utility.LogDataSource;
 import utility.RampedSpeedController;
@@ -17,22 +19,12 @@ public class GearIntake extends Subsystem implements LogDataSource {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-	private RampedSpeedController m_gearIntakeMotor;
-    public double getGearIntakeMotorTarget()
-    {
-    	return m_gearIntakeMotor.getDesiredSetting() * -1;
-    }
-    public void setGearIntakeMotorTarget(double x)
+	private SpeedController m_gearIntakeMotor;
+    public void setGearIntakeMotor(double x)
     {
     	m_gearIntakeMotor.set(-1 * x);
-    }
-    public double getGearIntakeMotorActual()
-    {
-    	return m_gearIntakeMotor.getMotorLevel() * -1;
-    }
-    public void updateGearIntakeMotor()
-    {
-    	m_gearIntakeMotor.updateMotorLevel();
+    	m_motorOn = !(Math.abs(x) < 0.01);
+    	
     }
 
     private DigitalInput m_gearIntakeSwitch;
@@ -40,9 +32,14 @@ public class GearIntake extends Subsystem implements LogDataSource {
     {
     	return m_gearIntakeSwitch.get();
     }
+    private boolean m_motorOn;
+    public boolean motorOn()
+    {
+    	return m_motorOn;
+    }
 
     private boolean gearIsLoaded = false;
-    public boolean isBallLoaded()
+    public boolean isGearLoaded()
     {
     	if ( gearIsLoaded == false ) {
     		if ( getGearIntakeSwitch() == false ) {
@@ -58,28 +55,23 @@ public class GearIntake extends Subsystem implements LogDataSource {
 
     public GearIntake()
     {    	
-        m_gearIntakeMotor = new RampedSpeedController(ControllerType.Talon,RobotMap.MOTOR_GEAR_INTAKE);
-        m_gearIntakeMotor.setName("GearIntake");
+        m_gearIntakeMotor = new Spark(RobotMap.MOTOR_GEAR_INTAKE);
         
 
         m_gearIntakeSwitch = new DigitalInput(RobotMap.SWITCH_GEAR_INTAKE_LIMIT);
+        m_motorOn = false;
     }
     
     public void initialize()
     {
     	gearIsLoaded = false;
 
-        m_gearIntakeMotor.setMaxRaisePerInterval (0.2);
-        m_gearIntakeMotor.setMaxLowerPerInterval (0.4);
-        m_gearIntakeMotor.setPositiveDeadband    (0.0);
-        m_gearIntakeMotor.setNegativeDeadband    (0.0);
-        m_gearIntakeMotor.setDesiredSetting(0.0);
     }
     
     public void gatherValues( ValueLogger logger)
     {
     	logger.logBooleanValue("Intake Switch", getGearIntakeSwitch());
-    	m_gearIntakeMotor.gatherValues(logger);
+    	//m_gearIntakeMotor.gatherValues(logger);
     }
 
     public void initDefaultCommand() {

@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import utility.LogDataSource;
 import utility.ValueLogger;
 
-import org.usfirst.frc.team4587.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4587.robot.commands.TurnTurretDegrees;
 import org.usfirst.frc.team4587.robot.subsystems.DriveBase;
 import org.usfirst.frc.team4587.robot.subsystems.DriveBaseSimple;
@@ -33,7 +32,6 @@ public class Robot extends IterativeRobot implements LogDataSource {
 	{
 		return m_robot;
 	}
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	private static OI m_oi;
 	public static OI getOI()
 	{

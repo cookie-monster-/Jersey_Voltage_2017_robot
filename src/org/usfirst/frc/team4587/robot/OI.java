@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4587.robot;
 
+import org.usfirst.frc.team4587.robot.commands.EjectGear;
 import org.usfirst.frc.team4587.robot.commands.PrintTurretEncoder;
 import org.usfirst.frc.team4587.robot.commands.StartTurretMotors;
 import org.usfirst.frc.team4587.robot.commands.ToggleAimMode;
@@ -56,6 +57,7 @@ public class OI implements LogDataSource {
     	buttonB1.whenPressed(new testTurretDecrease());
     	buttonY1.whenPressed(new testTurretSetSetpoint());
     	leftBumper1.whenPressed(new ToggleGearIntakeMotors());
+    	rightBumper1.whenPressed(new EjectGear());
     	
     	//  D R I V E R   C O N T R O L L E R
 

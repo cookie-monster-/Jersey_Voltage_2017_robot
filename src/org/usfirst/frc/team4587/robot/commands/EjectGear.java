@@ -7,24 +7,18 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ToggleGearIntakeMotors extends Command {
+public class EjectGear extends Command {
 
+	private boolean m_motorOn = false;
 
-    public ToggleGearIntakeMotors() {
+    public EjectGear() {
     	requires(Robot.getGearIntake());
     }
 
     // Called just before this Command runs the first time
     protected void initialize() 
     {
-    	if(Robot.getGearIntake().motorOn())
-    	{
-    		Robot.getGearIntake().setGearIntakeMotor(0.0);
-    	}
-    	else
-    	{
-    		Robot.getGearIntake().setGearIntakeMotor(1.0);
-    	}
+    	Robot.getGearIntake().setGearIntakeMotor(-1.0);
     }
 
     // Called repeatedly when this Command is scheduled to run

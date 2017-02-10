@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Aim extends Command {
 
 	private double m_centerline;
+	private double m_lastCenterline;
     public Aim() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -19,7 +20,7 @@ public class Aim extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
+    	m_lastCenterline = -5000;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -31,9 +32,15 @@ public class Aim extends Command {
 	    	{
 	    		if(Math.abs(m_centerline - 320) > 20)
 	    		{
-	    			double error = (m_centerline - 320) / 16.0;
-	    			Robot.getTurret().setSetpoint(Robot.getTurret().getSetpoint() + error);
-	    			SmartDashboard.putNumber("Desired Setpoint", Robot.getTurret().getSetpoint() + error);
+	    			SmartDashboard.putNumber("last centerline", m_lastCenterline);
+	    			if(m_lastCenterline != m_centerline)
+	    			{
+		    			double error = (m_centerline - 320) / 16.0;
+		    			Robot.getTurret().setSetpoint(Robot.getTurret().getSetpoint() + error);
+		    			//Robot.getTurret().setSetpoint(120);
+		    			m_lastCenterline = m_centerline;
+		    			SmartDashboard.putNumber("Desired Setpoint", Robot.getTurret().getSetpoint() + error);
+	    			}
 	    		}
 	    	}
     	}
